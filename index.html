@@ -1,0 +1,63 @@
+<!doctype html>
+
+<title>CodeMirror: Potigol mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="lib/docs.css">
+
+<link rel="stylesheet" href="lib/codemirror.css">
+<script src="lib/codemirror.js"></script>
+<script src="potigol.js"></script>
+<style type="text/css">.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+<div id=nav>
+  <a href="http://codemirror.net"><h1>CodeMirror</h1><img id=logo src="lib/logo.png"></a>
+
+  <ul>
+    <li><a href="">Home</a>
+    <li><a href="">Manual</a>
+    <li><a href="https://github.com/codemirror/codemirror">Code</a>
+  </ul>
+  <ul>
+    <li><a href="">Language modes</a>
+    <li><a class=active href="#">Potigol</a>
+  </ul>
+</div>
+
+<article>
+<h2>Potigol mode</h2>
+
+
+<div><textarea id="code" name="code" style="height: 250px;">
+# Example Potigol code 
+
+# This is a comment
+
+escreva "Jogo Maior Menor"
+escreva "Pense em um número entre 1 e 100."
+var menor := 1
+var maior := 100
+escreva "O número é maior, menor ou igual a 50?"
+var resposta := leia_texto
+enquanto resposta &lt;&gt; "igual" faça
+  metade = (maior + menor) div 2
+  se resposta == "maior" então
+    menor := metade
+  senãose resposta == "menor" então
+    maior := metade
+  senão
+    escreva "Não entendi."
+  fim
+  escreva "O número é maior, menor ou igual a {(maior + menor) div 2}?"
+  resposta := leia_texto
+fim
+escreva "Consegui!"
+</textarea></div>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: "text/x-potigol"
+      });
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-potigol</code>.</p>
+  </article>
