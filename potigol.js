@@ -12,40 +12,50 @@
 "use strict";
 
 CodeMirror.defineMode("potigol", function() {
+  
   function words(str) {
     var obj = {}, words = str.split(" ");
-    for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
+    for (var i = 0; i < words.length; ++i)
+      obj[words[i]] = true;
     return obj;
   }
+
   // var keywords = words("and array begin case const div do downto else end file for forward integer " +
   //                      "boolean char function goto if in label mod nil not of or packed procedure " +
   //                      "program record repeat set string then to type until var while with");
   var keywords = words("caso então entao senao senão para de ate até passo se senãose senaose "+
                        "escolha enquanto fim faça faca gere " +
-                       "use var tipo mod div e ou não nao formato " +
-                       "escreva imprima");
+                       "use var tipo mod div e ou não nao formato ");
 
+  var keyFunctionsLanguage = words("leia_inteiro escreva imprima");
+  
   var atoms = {"null": true};
 
-  var isOperatorChar = /[+\-*&%=<>!?|\/]/;
+  // var keyFunctionsLanguage = ["==", "!=", "<", ">", "<=", ">=",":="];
+
+  var isOperatorChar = /[+\-*&%:=<>!?|\/]/;
 
   function tokenBase(stream, state) {
     var ch = stream.next();
-    // if (ch == "#" && state.startOfLine) {
-    //   stream.skipToEnd();
-    //   return "meta";
-    // }
     if (ch == '"' || ch == "'") {
       state.tokenize = tokenString(ch);
       return state.tokenize(stream, state);
     }
+
     // if (ch == "(" && stream.eat("*")) {
     //   state.tokenize = tokenComment;
     //   return tokenComment(stream, state);
     // }
-    if (/[\[\]{}\(\),;\:\.]/.test(ch)) {
-      return null;
+    // if (/[\[\]{}\(\),;\:\.]/.test(ch)) {
+    //   return null;
+    // }
+
+    // Lighting ()
+    if (/[\(\)]/.test(ch)) {
+      return "variable-3";
     }
+
+    // Lighting Numbers    
     if (/\d/.test(ch)) {
       stream.eatWhile(/[\w\.]/);
       return "number";
@@ -57,10 +67,27 @@ CodeMirror.defineMode("potigol", function() {
         return "comment";
     }
 
+    
+
+    // Lighting operators
     if (isOperatorChar.test(ch)) {
       stream.eatWhile(isOperatorChar);
-      return "operator";
+      // Definindo operador como bracket para diferenciar a cor no ambiente de testes.
+      return "bracket";
     }
+
+    
+
+    // Attempt to match an operator
+    // if (stream.match(keyFunctionsLanguage) > 0) {
+    //   return "def";
+    // }
+
+    if (keyFunctionsLanguage.propertyIsEnumerable(cur))
+      return "def";
+
+
+
     stream.eatWhile(/[\w\$_]/);
     var cur = stream.current();
     if (keywords.propertyIsEnumerable(cur))
@@ -69,6 +96,12 @@ CodeMirror.defineMode("potigol", function() {
       return "atom";
     return "variable";
   }
+
+
+
+
+
+
 
 
 
